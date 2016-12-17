@@ -4394,10 +4394,6 @@ The Device Finder offers a collection of static methods that can be called to fi
   * `Headset` - The headset.
   * `Left_Controller` - The left hand controller.
   * `Right_Controller` - The right hand controller.
- * `public enum ControllerHand` - Controller hand reference.
-  * `None` - No hand is assigned.
-  * `Left` - The left hand is assigned.
-  * `Right` - The right hand is assigned.
 
 ### Class Methods
 
@@ -4448,23 +4444,23 @@ The DeviceTransform method returns the transform for a given Devices enum.
 
 #### GetControllerHandType/1
 
-  > `public static ControllerHand GetControllerHandType(string hand)`
+  > `public static SDK_BaseController.ControllerHand GetControllerHandType(string hand)`
 
   * Parameters
    * `string hand` - The string representation of the hand to retrieve the type of. `left` or `right`.
   * Returns
-   * `ControllerHand` - A ControllerHand representing either the Left or Right hand.
+   * `SDK_BaseController.ControllerHand` - A ControllerHand representing either the Left or Right hand.
 
 The GetControllerHandType method is used for getting the enum representation of ControllerHand from a given string.
 
 #### GetControllerHand/1
 
-  > `public static ControllerHand GetControllerHand(GameObject controller)`
+  > `public static SDK_BaseController.ControllerHand GetControllerHand(GameObject controller)`
 
   * Parameters
    * `GameObject controller` - The controller game object to check the hand of.
   * Returns
-   * `ControllerHand` - A ControllerHand representing either the Left or Right hand.
+   * `SDK_BaseController.ControllerHand` - A ControllerHand representing either the Left or Right hand.
 
 The GetControllerHand method is used for getting the enum representation of ControllerHand for the given controller game object.
 
@@ -4492,11 +4488,11 @@ The GetControllerRightHand method retrieves the game object for the right hand c
 
 #### IsControllerOfHand/2
 
-  > `public static bool IsControllerOfHand(GameObject checkController, ControllerHand hand)`
+  > `public static bool IsControllerOfHand(GameObject checkController, SDK_BaseController.ControllerHand hand)`
 
   * Parameters
    * `GameObject checkController` - The actual controller object that is being checked.
-   * `ControllerHand hand` - The representation of a hand to check if the given controller matches.
+   * `SDK_BaseController.ControllerHand hand` - The representation of a hand to check if the given controller matches.
   * Returns
    * `bool` - Is true if the given controller matches the given hand.
 
@@ -4883,7 +4879,7 @@ The base scripts used to determine the interface for interacting with a Unity VR
 ---
 
 ## Base System (SDK_BaseSystem)
- > extends ScriptableObject, SDK_InterfaceSystem
+ > extends ScriptableObject
 
 ### Overview
 
@@ -4929,7 +4925,7 @@ The ForceInterleavedReprojectionOn method determines whether Interleaved Reproje
 ---
 
 ## Base Headset (SDK_BaseHeadset)
- > extends ScriptableObject, SDK_InterfaceHeadset
+ > extends ScriptableObject
 
 ### Overview
 
@@ -4941,7 +4937,7 @@ This is an abstract class to implement the interface required by all implemented
 
 #### GetHeadset/0
 
-  > `public virtual Transform GetHeadset()`
+  > `public abstract Transform GetHeadset();`
 
   * Parameters
    * _none_
@@ -4952,7 +4948,7 @@ The GetHeadset method returns the Transform of the object that is used to repres
 
 #### GetHeadsetCamera/0
 
-  > `public virtual Transform GetHeadsetCamera()`
+  > `public abstract Transform GetHeadsetCamera();`
 
   * Parameters
    * _none_
@@ -4999,13 +4995,36 @@ The AddHeadsetFade method attempts to add the fade functionality to the game obj
 ---
 
 ## Base Controller (SDK_BaseController)
- > extends ScriptableObject, SDK_InterfaceController
+ > extends ScriptableObject
 
 ### Overview
 
 The Base Controller SDK script provides a bridge to SDK methods that deal with the input devices.
 
 This is an abstract class to implement the interface required by all implemented SDKs.
+
+### Class Variables
+
+ * `public enum ButtonPressTypes` - Concepts of controller button press
+  * `Press` - The button is currently being pressed.
+  * `PressDown` - The button has just been pressed down.
+  * `PressUp` - The button has just been released.
+  * `Touch` - The button is currently being touched.
+  * `TouchDown` - The button has just been touched.
+  * `TouchUp` - The button is no longer being touched.
+ * `public enum ControllerElements` - The elements of a generic controller
+  * `AttachPoint` - The default point on the controller to attach grabbed objects to.
+  * `Trigger` - The trigger button.
+  * `GripLeft` - The left part of the grip button collection.
+  * `GripRight` - The right part of the grip button collection.
+  * `Touchpad` - The touch pad/stick.
+  * `ButtonOne` - The first generic button.
+  * `SystemMenu` - The system menu button.
+  * `Body` - The encompassing mesh of the controller body.
+ * `public enum ControllerHand` - Controller hand reference.
+  * `None` - No hand is assigned.
+  * `Left` - The left hand is assigned.
+  * `Right` - The right hand is assigned.
 
 ### Class Methods
 
@@ -5022,11 +5041,11 @@ The GetControllerDefaultColliderPath returns the path to the prefab that contain
 
 #### GetControllerElementPath/3
 
-  > `public abstract string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false);`
+  > `public abstract string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false);`
 
   * Parameters
-   * `VRTK_ControllerElements element` - The controller element to look up.
-   * `VRTK_DeviceFinder.ControllerHand hand` - The controller hand to look up.
+   * `ControllerElements element` - The controller element to look up.
+   * `ControllerHand hand` - The controller hand to look up.
    * `bool fullPath` - Whether to get the initial path or the full path to the element.
   * Returns
    * `string` - A string containing the path to the game object that the controller element resides in.
@@ -5069,7 +5088,7 @@ The GetControllerOrigin method returns the origin of the given controller.
 
 #### GetControllerLeftHand/1
 
-  > `public virtual GameObject GetControllerLeftHand(bool actual = false)`
+  > `public abstract GameObject GetControllerLeftHand(bool actual = false);`
 
   * Parameters
    * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
@@ -5080,7 +5099,7 @@ The GetControllerLeftHand method returns the GameObject containing the represent
 
 #### GetControllerRightHand/1
 
-  > `public virtual GameObject GetControllerRightHand(bool actual = false)`
+  > `public abstract GameObject GetControllerRightHand(bool actual = false);`
 
   * Parameters
    * `bool actual` - If true it will return the actual controller, if false it will return the script alias controller GameObject.
@@ -5091,7 +5110,7 @@ The GetControllerRightHand method returns the GameObject containing the represen
 
 #### IsControllerLeftHand/1
 
-  > `public virtual bool IsControllerLeftHand(GameObject controller)`
+  > `public abstract bool IsControllerLeftHand(GameObject controller);`
 
   * Parameters
    * `GameObject controller` - The GameObject to check.
@@ -5102,7 +5121,7 @@ The IsControllerLeftHand/1 method is used to check if the given controller is th
 
 #### IsControllerRightHand/1
 
-  > `public virtual bool IsControllerRightHand(GameObject controller)`
+  > `public abstract bool IsControllerRightHand(GameObject controller);`
 
   * Parameters
    * `GameObject controller` - The GameObject to check.
@@ -5113,7 +5132,7 @@ The IsControllerRightHand/1 method is used to check if the given controller is t
 
 #### IsControllerLeftHand/2
 
-  > `public virtual bool IsControllerLeftHand(GameObject controller, bool actual)`
+  > `public abstract bool IsControllerLeftHand(GameObject controller, bool actual);`
 
   * Parameters
    * `GameObject controller` - The GameObject to check.
@@ -5125,7 +5144,7 @@ The IsControllerLeftHand/2 method is used to check if the given controller is th
 
 #### IsControllerRightHand/2
 
-  > `public virtual bool IsControllerRightHand(GameObject controller, bool actual)`
+  > `public abstract bool IsControllerRightHand(GameObject controller, bool actual);`
 
   * Parameters
    * `GameObject controller` - The GameObject to check.
@@ -5137,7 +5156,7 @@ The IsControllerRightHand/2 method is used to check if the given controller is t
 
 #### GetControllerModel/1
 
-  > `public virtual GameObject GetControllerModel(GameObject controller)`
+  > `public abstract GameObject GetControllerModel(GameObject controller);`
 
   * Parameters
    * `GameObject controller` - The GameObject to get the model alias for.
@@ -5148,10 +5167,10 @@ The GetControllerModel method returns the model alias for the given GameObject.
 
 #### GetControllerModel/1
 
-  > `public virtual GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)`
+  > `public abstract GameObject GetControllerModel(ControllerHand hand);`
 
   * Parameters
-   * `VRTK_DeviceFinder.ControllerHand hand` - The hand enum of which controller model to retrieve.
+   * `ControllerHand hand` - The hand enum of which controller model to retrieve.
   * Returns
    * `GameObject` - The GameObject that has the model alias within it.
 
@@ -5580,7 +5599,7 @@ The IsButtonOneTouchedUpOnIndex method is used to determine if the controller bu
 ---
 
 ## Base Boundaries (SDK_BaseBoundaries)
- > extends ScriptableObject, SDK_InterfaceBoundaries
+ > extends ScriptableObject
 
 ### Overview
 
@@ -5592,7 +5611,7 @@ This is an abstract class to implement the interface required by all implemented
 
 #### GetPlayArea/0
 
-  > `public virtual Transform GetPlayArea()`
+  > `public abstract Transform GetPlayArea();`
 
   * Parameters
    * _none_
@@ -5787,11 +5806,11 @@ The GetControllerDefaultColliderPath returns the path to the prefab that contain
 
 #### GetControllerElementPath/3
 
-  > `public override string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)`
+  > `public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)`
 
   * Parameters
-   * `VRTK_ControllerElements element` - The controller element to look up.
-   * `VRTK_DeviceFinder.ControllerHand hand` - The controller hand to look up.
+   * `ControllerElements element` - The controller element to look up.
+   * `ControllerHand hand` - The controller hand to look up.
    * `bool fullPath` - Whether to get the initial path or the full path to the element.
   * Returns
    * `string` - A string containing the path to the game object that the controller element resides in.
@@ -5913,10 +5932,10 @@ The GetControllerModel method returns the model alias for the given GameObject.
 
 #### GetControllerModel/1
 
-  > `public override GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)`
+  > `public override GameObject GetControllerModel(ControllerHand hand)`
 
   * Parameters
-   * `VRTK_DeviceFinder.ControllerHand hand` - The hand enum of which controller model to retrieve.
+   * `ControllerHand hand` - The hand enum of which controller model to retrieve.
   * Returns
    * `GameObject` - The GameObject that has the model alias within it.
 
@@ -6546,11 +6565,11 @@ The GetControllerDefaultColliderPath returns the path to the prefab that contain
 
 #### GetControllerElementPath/3
 
-  > `public override string GetControllerElementPath(VRTK_ControllerElements element, VRTK_DeviceFinder.ControllerHand hand, bool fullPath = false)`
+  > `public override string GetControllerElementPath(ControllerElements element, ControllerHand hand, bool fullPath = false)`
 
   * Parameters
-   * `VRTK_ControllerElements element` - The controller element to look up.
-   * `VRTK_DeviceFinder.ControllerHand hand` - The controller hand to look up.
+   * `ControllerElements element` - The controller element to look up.
+   * `ControllerHand hand` - The controller hand to look up.
    * `bool fullPath` - Whether to get the initial path or the full path to the element.
   * Returns
    * `string` - A string containing the path to the game object that the controller element resides in.
@@ -6580,6 +6599,17 @@ The GetControllerIndex method returns the index of the given controller.
 
 The GetControllerByIndex method returns the GameObject of a controller with a specific index.
 
+#### GetControllerOrigin/1
+
+  > `public override Transform GetControllerOrigin(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The controller to retrieve the origin from.
+  * Returns
+   * `Transform` - A Transform containing the origin of the controller.
+
+The GetControllerOrigin method returns the origin of the given controller.
+
 #### GetControllerLeftHand/1
 
   > `public override GameObject GetControllerLeftHand(bool actual = false)`
@@ -6602,23 +6632,69 @@ The GetControllerLeftHand method returns the GameObject containing the represent
 
 The GetControllerRightHand method returns the GameObject containing the representation of the right hand controller.
 
-#### GetControllerOrigin/1
+#### IsControllerLeftHand/1
 
-  > `public override Transform GetControllerOrigin(GameObject controller)`
+  > `public override bool IsControllerLeftHand(GameObject controller)`
 
   * Parameters
-   * `GameObject controller` - The controller to retrieve the origin from.
+   * `GameObject controller` - The GameObject to check.
   * Returns
-   * `Transform` - A Transform containing the origin of the controller.
+   * `bool` - Returns true if the given controller is the left hand controller.
 
-The GetControllerOrigin method returns the origin of the given controller.
+The IsControllerLeftHand/1 method is used to check if the given controller is the the left hand controller.
+
+#### IsControllerRightHand/1
+
+  > `public override bool IsControllerRightHand(GameObject controller)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+  * Returns
+   * `bool` - Returns true if the given controller is the right hand controller.
+
+The IsControllerRightHand/1 method is used to check if the given controller is the the right hand controller.
+
+#### IsControllerLeftHand/2
+
+  > `public override bool IsControllerLeftHand(GameObject controller, bool actual)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+   * `bool actual` - If true it will check the actual controller, if false it will check the script alias controller.
+  * Returns
+   * `bool` - Returns true if the given controller is the left hand controller.
+
+The IsControllerLeftHand/2 method is used to check if the given controller is the the left hand controller.
+
+#### IsControllerRightHand/2
+
+  > `public override bool IsControllerRightHand(GameObject controller, bool actual)`
+
+  * Parameters
+   * `GameObject controller` - The GameObject to check.
+   * `bool actual` - If true it will check the actual controller, if false it will check the script alias controller.
+  * Returns
+   * `bool` - Returns true if the given controller is the right hand controller.
+
+The IsControllerRightHand/2 method is used to check if the given controller is the the right hand controller.
 
 #### GetControllerModel/1
 
-  > `public override GameObject GetControllerModel(VRTK_DeviceFinder.ControllerHand hand)`
+  > `public override GameObject GetControllerModel(GameObject controller)`
 
   * Parameters
-   * `VRTK_DeviceFinder.ControllerHand hand` - The hand enum of which controller model to retrieve.
+   * `GameObject controller` - The GameObject to get the model alias for.
+  * Returns
+   * `GameObject` - The GameObject that has the model alias within it.
+
+The GetControllerModel method returns the model alias for the given GameObject.
+
+#### GetControllerModel/1
+
+  > `public override GameObject GetControllerModel(ControllerHand hand)`
+
+  * Parameters
+   * `ControllerHand hand` - The hand enum of which controller model to retrieve.
   * Returns
    * `GameObject` - The GameObject that has the model alias within it.
 
