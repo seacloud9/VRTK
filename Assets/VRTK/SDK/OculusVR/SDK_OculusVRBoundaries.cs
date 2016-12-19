@@ -1,0 +1,62 @@
+﻿// OculusVR Boundaries|SDK_OculusVR|004
+namespace VRTK
+{
+#if VRTK_SDK_OCULUSVR
+    using UnityEngine;
+
+    /// <summary>
+    /// The OculusVR Boundaries SDK script provides a bridge to the OculusVR SDK play area.
+    /// </summary>
+    public class SDK_OculusVRBoundaries : SDK_BaseBoundaries
+    {
+        /// <summary>
+        /// The GetPlayArea method returns the Transform of the object that is used to represent the play area in the scene.
+        /// </summary>
+        /// <returns>A transform of the object representing the play area in the scene.</returns>
+        public override Transform GetPlayArea()
+        {
+            cachedPlayArea = GetSDKManagerPlayArea();
+            if (cachedPlayArea == null)
+            {
+                cachedPlayArea = FindObjectOfType<OVRManager>().transform;
+            }
+            return cachedPlayArea;
+        }
+
+        /// <summary>
+        /// The GetPlayAreaVertices method returns the points of the play area boundaries.
+        /// </summary>
+        /// <param name="playArea">The GameObject containing the play area representation.</param>
+        /// <returns>A Vector3 array of the points in the scene that represent the play area boundaries.</returns>
+        public override Vector3[] GetPlayAreaVertices(GameObject playArea)
+        {
+            var area = new OVRBoundary();
+            return area.GetGeometry(OVRBoundary.BoundaryType.PlayArea);
+        }
+
+        /// <summary>
+        /// The GetPlayAreaBorderThickness returns the thickness of the drawn border for the given play area.
+        /// </summary>
+        /// <param name="playArea">The GameObject containing the play area representation.</param>
+        /// <returns>The thickness of the drawn border.</returns>
+        public override float GetPlayAreaBorderThickness(GameObject playArea)
+        {
+            return 0.1f;
+        }
+
+        /// <summary>
+        /// The IsPlayAreaSizeCalibrated method returns whether the given play area size has been auto calibrated by external sensors.
+        /// </summary>
+        /// <param name="playArea">The GameObject containing the play area representation.</param>
+        /// <returns>Returns true if the play area size has been auto calibrated and set by external sensors.</returns>
+        public override bool IsPlayAreaSizeCalibrated(GameObject playArea)
+        {
+            return true;
+        }
+    }
+#else
+    public class SDK_OculusVRBoundaries : SDK_FallbackBoundaries
+    {
+    }
+#endif
+}

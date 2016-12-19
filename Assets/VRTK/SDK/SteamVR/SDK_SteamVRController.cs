@@ -755,25 +755,7 @@ namespace VRTK
             return trackedObject;
         }
 
-        private GameObject GetActualController(GameObject controller)
-        {
-            GameObject returnController = null;
-            var sdkManager = VRTK_SDKManager.instance;
-            if (sdkManager != null)
-            {
-                if (IsControllerLeftHand(controller))
-                {
-                    returnController = sdkManager.actualLeftController;
-                }
-                else if (IsControllerRightHand(controller))
-                {
-                    returnController = sdkManager.actualRightController;
-                }
-            }
-            return returnController;
-        }
-
-        private static bool IsButtonPressed(uint index, ButtonPressTypes type, ulong button)
+        private bool IsButtonPressed(uint index, ButtonPressTypes type, ulong button)
         {
             if (index >= uint.MaxValue)
             {
